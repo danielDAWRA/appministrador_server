@@ -10,8 +10,8 @@ async function login(req, res) {
   }
 
   try {
-    const userInfo = await authService.login({ email, password });
-    res.json(userInfo);
+    const token = await authService.login({ email, password });
+    res.json(token);
   } catch (error) {
     const myError = JSON.parse(error.message);
     res.status(myError.code);
@@ -20,17 +20,27 @@ async function login(req, res) {
 }
 
 function isValidEmail(email) {
-  // eslint-disable-next-line no-useless-escape
   const emailRegex = /^(?=.{1,254}$)(?=.{1,64}@.{1,255}$)[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?!-)[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/;
-  // regex validates emails according to RFC 5321 conforming to Google's standards for nodemailer
   return emailRegex.test(email);
 }
 
+function isValidPhoneNumber(phoneNumber) {
+  const phoneRegex = /^\+?[0-9]+$/;
+  return phoneRegex.test(phoneNumber);
+}
+
 async function register(req, res) {
-  const { email, password, repeatedPassword } = req.body;
+  const {
+    email, phone, password, repeatedPassword,
+  } = req.body;
   if (!isValidEmail(email)) {
     res.status(400);
     res.json({ msg: 'Please enter a valid email address.' });
+    return;
+  }
+  if (!isValidPhoneNumber(phone)) {
+    res.status(400);
+    res.json({ msg: 'Please enter a valid telephone number.' });
     return;
   }
   if (password !== repeatedPassword) {

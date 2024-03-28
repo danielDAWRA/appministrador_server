@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import * as usersRepository from '../users/users.repository.js';
 import transporter from '../nodemailer.js';
 
+const { TOKEN_TIMEOUT, EMAIL_TIMEOUT, SERVER_URL } = process.env;
+
 function getToken({ userId, timeout }) {
   const payload = {
     userId,
@@ -31,12 +33,7 @@ async function login({ email, password }) {
 
   const { TOKEN_TIMEOUT } = process.env;
   const token = getToken({ userId: user._id, timeout: TOKEN_TIMEOUT });
-
-  const formattedUser = { ...user };
-  delete formattedUser.password;
-  delete formattedUser.credit;
-
-  return { token, user: JSON.stringify(formattedUser) };
+  return token;
 }
 
 async function isExistingUser({ email }) {
@@ -45,13 +42,12 @@ async function isExistingUser({ email }) {
 }
 
 async function sendEmail({ email }) {
-  const { EMAIL_TIMEOUT, SERVER_URL } = process.env;
   const emailToken = getToken({ userId: email, timeout: EMAIL_TIMEOUT });
   const url = `${SERVER_URL}auth/validate/${emailToken}`;
   await transporter.sendMail({
     to: email,
-    subject: 'Confirm registration',
-    html: `<h3>You're almost there!</h3><br><a href=${url}>Click this link to confirm your email address.</a>`,
+    subject: 'Confirmar registro',
+    html: `<h3>Está a un paso!</h3><br><a href=${url}>Haga clic en este enlace para confirmar su dirección de correo electrónico.</a>`,
   });
 }
 
@@ -63,7 +59,6 @@ async function register({ newUser }) {
   user.password = hashedPassword;
   const createdUser = await usersRepository.register({ user });
   await sendEmail({ email: user.email });
-  const { TOKEN_TIMEOUT } = process.env;
   const token = getToken({ userId: createdUser._id, timeout: TOKEN_TIMEOUT });
   return token;
 }
