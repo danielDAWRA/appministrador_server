@@ -11,12 +11,7 @@ function isLogged(req, res, next) {
     '/auth/login',
     '/auth/register',
     '/auth/validate',
-    '/auth/modifySensitiveData',
-    '/products/',
-    '/products/all',
-    '/gameTitles/productId/',
-    '/genres/',
-    '/platforms',
+    // '/auth/modifySensitiveData',
   ];
   const isPublicRoute = publicRoutes.some((publicRoute) => req.url.startsWith(publicRoute));
   if (isPublicRoute) {
@@ -38,7 +33,7 @@ function isLogged(req, res, next) {
     const user = await userService.getById({ id: payload.userId });
     if (!user.validated) {
       res.status(401);
-      res.json({ msg: 'Please confirm your email address' });
+      res.json({ msg: 'Por favor, confirma tu dirección de correo electrónico' });
       return;
     }
     req.user = user;
