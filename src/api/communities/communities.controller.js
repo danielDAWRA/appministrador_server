@@ -1,37 +1,40 @@
-// import * as communitiesService from './communities.service.js';
+import * as communitiesService from './communities.service.js';
 // esto esta mal salta directamente al model sin pasar ni por service ni por repo - Se corregirá
+// Marc:
+// he tenido que trabajar con una de estas funciones
+// he comentado los demás y vamos refactorizando el código en cuanto necesitemos una función
 
-import * as communityModel from './communities.model.js';
+// import * as communityModel from './communities.model.js';
 
-async function create(req, res) {
-  try {
-    const userId = req.auth.payload.sub;
-    const community = await communityModel.create({
-      ...req.body,
-      admin: userId,
-      incidences: [],
-    });
-    res
-      .status(201)
-      .send({ message: 'Comunidad creada con éxito', community });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'No se ha podido crear la comunidad' });
-  }
-}
+// async function create(req, res) {
+//   try {
+//     const userId = req.auth.payload.sub;
+//     const community = await communityModel.create({
+//       ...req.body,
+//       admin: userId,
+//       incidences: [],
+//     });
+//     res
+//       .status(201)
+//       .send({ message: 'Comunidad creada con éxito', community });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({ message: 'No se ha podido crear la comunidad' });
+//   }
+// }
 
-async function getAll(req, res) {
-  try {
-    const communities = await communityModel.find().populate({
-      path: 'incidences',
-      select: 'status category description',
-    });
-    res.status(200).send(communities);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Error al acceder a las comunidades' });
-  }
-}
+// async function getAll(req, res) {
+//   try {
+//     const communities = await communityModel.find().populate({
+//       path: 'incidences',
+//       select: 'status category description',
+//     });
+//     res.status(200).send(communities);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({ message: 'Error al acceder a las comunidades' });
+//   }
+// }
 
 // async function getByAddress(req, res) {
 //   try {
@@ -55,17 +58,17 @@ async function getAll(req, res) {
 // }
 
 async function getById(req, res) {
-  try {
-    const community = await communityModel.findById(req.params._id);
-    res.status(200).send(community);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Error al buscar comunidad por id' });
+  const { _id } = req.params;
+  const community = await communitiesService.getById({ _id });
+  if (!community) {
+    res.status(500).send({ msg: 'Error al buscar comunidad por id' });
   }
+  return res.json(community);
 }
 
 export {
+  // eslint-disable-next-line import/prefer-default-export
   getById,
-  getAll,
-  create,
+//   getAll,
+//   create,
 };
