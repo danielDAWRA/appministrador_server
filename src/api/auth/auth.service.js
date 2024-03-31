@@ -21,19 +21,18 @@ function getToken({ userId, timeout }) {
 
 async function login({ email, password }) {
   const user = await usersRepository.getByEmail({ email });
-
   if (!user || !compareSync(password, user.password)) {
     const myError = {
-      code: 401,
-      msg: 'Wrong login information',
+      code: 400,
+      msg: 'Has introducido credenciales incorrectas',
     };
-
     throw new Error(JSON.stringify(myError));
   }
-
-  const { TOKEN_TIMEOUT } = process.env;
   const token = getToken({ userId: user._id, timeout: TOKEN_TIMEOUT });
-  return token;
+  return {
+    token,
+    user,
+  };
 }
 
 async function isExistingUser({ email }) {

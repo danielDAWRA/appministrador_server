@@ -5,13 +5,13 @@ async function login(req, res) {
 
   if (!email || !password) {
     res.status(400);
-    res.json({ msg: 'Email and password are required!' });
+    res.json({ msg: 'Completa ambos campos para acceder' });
     return;
   }
 
   try {
-    const token = await authService.login({ email, password });
-    res.json(token);
+    const response = await authService.login({ email, password });
+    res.json(response);
   } catch (error) {
     const myError = JSON.parse(error.message);
     res.status(myError.code);
@@ -20,6 +20,7 @@ async function login(req, res) {
 }
 
 function isValidEmail(email) {
+  // eslint-disable-next-line no-useless-escape
   const emailRegex = /^(?=.{1,254}$)(?=.{1,64}@.{1,255}$)[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?!-)[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/;
   return emailRegex.test(email);
 }
