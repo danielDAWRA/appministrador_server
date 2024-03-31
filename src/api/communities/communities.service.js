@@ -51,14 +51,9 @@ async function getAll(req, res) {
 //   }
 // }
 
-async function getById(req, res) {
-  try {
-    const community = await communitiesRepository.findById(req.params._id);
-    res.status(200).send(community);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Error al buscar comunidad por id' });
-  }
+async function getById({ _id }) {
+  const community = await communitiesRepository.getById({ _id });
+  return community;
 }
 
 export {

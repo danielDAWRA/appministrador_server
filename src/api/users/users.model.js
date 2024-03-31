@@ -44,7 +44,7 @@ const usersSchema = new Schema({
     postalCode: String,
   },
   community_id: {
-    type: Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
     ref: 'Community',
     required: true,
   },
