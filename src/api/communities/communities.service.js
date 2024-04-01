@@ -12,44 +12,19 @@ async function create(req, res) {
       .status(201)
       .send({ message: 'Comunidad creada con éxito', community });
   } catch (error) {
-    console.error(error);
     res.status(500).send({ message: 'No se ha podido crear la comunidad' });
   }
 }
 
-async function getAll(req, res) {
-  try {
-    const communities = await communitiesRepository.find().populate({
-      path: 'incidences',
-      select: 'status category description',
-    });
-    res.status(200).send(communities);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Error al acceder a las comunidades' });
-  }
+async function getAll() {
+  const communities = await communitiesRepository.getAll();
+  return communities;
 }
 
-// async function getByAddress(req, res) {
-//   try {
-//     const { address } = req.query;
-//     if (!address) {
-//       return res
-//         .status(400)
-//         .send({ message: 'Por favor, introduce una dirección válida' });
-//     }
-//     const searchRegex = new RegExp(address, 'i');
-//     const communities = await communitiesRepository.find({
-//       address: searchRegex,
-//     }).sort({ createdAt: -1 });
-//     res.status(200).send(communities);
-//   } catch (error) {
-//     console.error(error);
-//     res
-//       .status(500)
-//       .send({ message: 'Error al buscar comunidades por dirección' });
-//   }
-// }
+async function getByAddress({ normalizedAddress }) {
+  const community = await communitiesRepository.getByAddress({ normalizedAddress });
+  return community;
+}
 
 async function getById({ _id }) {
   const community = await communitiesRepository.getById({ _id });
@@ -60,5 +35,5 @@ export {
   getById,
   getAll,
   create,
-  // getByAddress,
+  getByAddress,
 };
