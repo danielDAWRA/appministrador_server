@@ -23,39 +23,42 @@ import * as communitiesService from './communities.service.js';
 //   }
 // }
 
-// async function getAll(req, res) {
-//   try {
-//     const communities = await communityModel.find().populate({
-//       path: 'incidences',
-//       select: 'status category description',
-//     });
-//     res.status(200).send(communities);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send({ message: 'Error al acceder a las comunidades' });
-//   }
-// }
+function normalizeDirection(direction) {
+  // Convert the address to lowercase and remove special characters, except numbers and accents
+  return direction
+    .toLowerCase()
+    .normalize('NFD') // Decompose characters with diacritics
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .replace(/[^a-z0-9]/g, ''); // Remove special characters
+}
 
-// async function getByAddress(req, res) {
-//   try {
-//     const { address } = req.query;
-//     if (!address) {
-//       return res
-//         .status(400)
-//         .send({ message: 'Por favor, introduce una dirección válida' });
-//     }
-//     const searchRegex = new RegExp(address, 'i');
-//     const communities = await communityModel.find({
-//       address: searchRegex,
-//     }).sort({ createdAt: -1 });
-//     res.status(200).send(communities);
-//   } catch (error) {
-//     console.error(error);
-//     res
-//       .status(500)
-//       .send({ message: 'Error al buscar comunidades por dirección' });
-//   }
-// }
+async function getAll(req, res) {
+  try {
+    const communities = await communitiesService.getAll();
+    res.status(200).send(communities);
+  } catch (error) {
+    res.status(500).send({ message: 'Error al acceder a las comunidades' });
+  }
+}
+
+async function getByAddress(req, res) {
+  try {
+    const { address } = req.body;
+    if (!address) {
+      res
+        .status(400)
+        .send({ message: 'Por favor, introduce una dirección válida' });
+      return;
+    }
+    const normalizedAddress = normalizeDirection(address);
+    const communities = await communitiesService.getByAddress({ normalizedAddress });
+    res.status(200).json(communities);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: 'Error al buscar comunidades por dirección' });
+  }
+}
 
 async function getById(req, res) {
   const { _id } = req.params;
@@ -67,8 +70,8 @@ async function getById(req, res) {
 }
 
 export {
-  // eslint-disable-next-line import/prefer-default-export
+  getByAddress,
   getById,
-//   getAll,
+  getAll,
 //   create,
 };
