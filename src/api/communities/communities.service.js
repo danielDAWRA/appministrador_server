@@ -1,4 +1,5 @@
 import * as communitiesRepository from './communities.repository.js';
+import * as usersRepository from '../users/users.repository.js';
 
 async function create(req, res) {
   try {
@@ -31,9 +32,16 @@ async function getById({ _id }) {
   return community;
 }
 
+async function getByUserId({ _id }) {
+  const user = await usersRepository.getById({ id: _id });
+  const community = await getById(user.community_id);
+  return community;
+}
+
 export {
   getById,
   getAll,
   create,
   getByAddress,
+  getByUserId,
 };
