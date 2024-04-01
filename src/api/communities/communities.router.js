@@ -7,5 +7,6 @@ const router = Router();
 router.get('/', communitiesController.getAll);
 router.get('/address', communitiesController.getByAddress);
 router.get('/:_id', communitiesController.getById);
+router.get('/user/:_id', communitiesController.getByUserId);
 
 export default router;

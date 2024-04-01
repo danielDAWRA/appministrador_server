@@ -69,9 +69,19 @@ async function getById(req, res) {
   return res.json(community);
 }
 
+async function getByUserId(req, res) {
+  const { _id } = req.params;
+  const community = await communitiesService.getByUserId({ _id });
+  if (!community) {
+    res.status(500).send({ msg: 'Error al buscar comunidad por id' });
+  }
+  return res.json(community);
+}
+
 export {
   getByAddress,
   getById,
+  getByUserId,
   getAll,
 //   create,
 };
