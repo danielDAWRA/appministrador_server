@@ -20,10 +20,10 @@ async function getByTitle(title) {
   return Incident;
 }
 
-async function create(newTitleData) {
-  const newTitle = new IncidentModel(newTitleData);
-  await newTitle.save();
-  return newTitle;
+async function create({ newIncident }) {
+  const createdIncident = new IncidentModel(newIncident);
+  await createdIncident.save();
+  return createdIncident;
 }
 
 export {

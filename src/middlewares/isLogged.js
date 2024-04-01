@@ -17,6 +17,9 @@ function isLogged(req, res, next) {
     '/gameTitles/productId/',
     '/genres/',
     '/platforms',
+    '/incidents', // while developing
+    '/oauth2/auth', // while developing
+    '/oauth2/oauth2callback', // while developing
   ];
   const isPublicRoute = publicRoutes.some((publicRoute) => req.url.startsWith(publicRoute));
   if (isPublicRoute) {
