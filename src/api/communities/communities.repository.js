@@ -26,8 +26,8 @@ async function getByAddress({ normalizedAddress }) {
   return communities;
 }
 
-async function getById({ _id }) {
-  const community = await communityModel.findById(_id).lean();
+async function getById({ ids }) {
+  const community = await communityModel.find({ _id: { $in: ids } }).lean();
   return community;
 }
 
