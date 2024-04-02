@@ -1,23 +1,23 @@
 import IncidentModel from './incidents.model.js';
 
-async function getById({ id }) {
-  const Incident = await IncidentModel.findById(id);
-  return Incident;
+async function getById({ _id }) {
+  const incident = await IncidentModel.findById(_id);
+  return incident;
 }
 
 async function getAll() {
-  const incidents = await IncidentModel.find();
+  const incidents = await IncidentModel.find({});
   return incidents;
 }
 
 async function getByProductId({ IncidentId }) {
-  const Incident = await IncidentModel.findById(IncidentId).lean();
-  return Incident;
+  const incident = await IncidentModel.findById(IncidentId).lean();
+  return incident;
 }
 
 async function getByTitle(title) {
-  const Incident = IncidentModel.findOne({ title });
-  return Incident;
+  const incident = IncidentModel.findOne({ title });
+  return incident;
 }
 
 async function create(newTitleData) {
