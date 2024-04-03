@@ -26,10 +26,34 @@ async function create(newTitleData) {
   return newTitle;
 }
 
+async function updateStatus({ _id, updatedBody }) {
+  const updatedProps = {
+    $push: { progressSteps: updatedBody.step },
+    $set: { status: updatedBody.status },
+  };
+
+  if (updatedBody.description !== undefined) {
+    updatedProps.$set.description = updatedBody.description;
+  }
+
+  if (updatedBody.image !== undefined) {
+    updatedProps.$set.image = updatedBody.image;
+  }
+
+  const updatedIncident = await
+  IncidentModel.findByIdAndUpdate(
+    { _id },
+    updatedProps,
+    { new: true },
+  ).populate({ path: 'community', select: 'address' });
+  return updatedIncident;
+}
+
 export {
   getById,
   getAll,
   getByProductId,
   getByTitle,
   create,
+  updateStatus,
 };

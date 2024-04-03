@@ -9,21 +9,21 @@ const incidentsSchema = new Schema({
   },
   community: {
     type: ObjectId,
-    ref: 'Incidence',
+    ref: 'Community',
   },
   description: {
     type: String,
   },
   owner: {
     type: ObjectId,
-    ref: 'Provider',
+    ref: 'User',
   },
   provider: {
     type: ObjectId,
-    ref: 'User',
+    ref: 'Provider',
   },
-  progress: [{
-    state: String,
+  progressSteps: [{
+    title: String,
     date: Date,
     note: String,
   }],
@@ -33,12 +33,8 @@ const incidentsSchema = new Schema({
   image: {
     type: String,
   },
-  status: {
-    state: String,
-    date: Date,
-    note: String,
-  },
-  notifyUsers: [{ type: ObjectId, ref: 'User' }],
+  status: String,
+  notifyUsers: [String],
 });
 
 const incidentModel = model('Incident', incidentsSchema);

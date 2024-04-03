@@ -8,22 +8,22 @@ const communitySchema = new Schema(
       type: String,
       required: [true, 'Address is required.'],
     },
-    propertyCount: {
+    n_propie: {
       type: Number,
     },
-    tenantCount: {
+    n_inquilinos: {
       type: Number,
     },
-    currentFee: {
+    cuota_actual: {
       type: Number,
     },
-    savings: {
+    ahorro: {
       type: Number,
     },
-    initialFunds: {
+    fondos_iniciales: {
       type: Number,
     },
-    years: {
+    anios: {
       type: Number,
     },
     president: {
@@ -34,7 +34,7 @@ const communitySchema = new Schema(
         type: Number,
       },
     },
-    expenses: {
+    gastos: {
       electricity: {
         type: Number,
       },
@@ -55,23 +55,13 @@ const communitySchema = new Schema(
       },
     },
     administrator: {
-      type: String,
+      type: ObjectId,
+      ref: 'User',
+
     },
     image: {
       type: String,
     },
-    owners: [
-      {
-        type: String,
-        required: [true, 'At least one owner must be added to the community.'],
-      },
-    ],
-    incidences: [
-      {
-        type: ObjectId,
-        ref: 'Incidence',
-      },
-    ],
   },
   { timestamps: true },
 );

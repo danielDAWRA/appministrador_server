@@ -16,8 +16,33 @@ async function create(req, res) {
   res.json(newTitleAndGenreRelation);
 }
 
+async function updateStatus(req, res) {
+  try {
+    const { body } = req;
+    if (!body._id) {
+      res
+        .status(400)
+        .send({ message: 'Por favor, introduce un id de incidencia válido' });
+      return;
+    }
+    if (!body.step) {
+      res
+        .status(400)
+        .send({ message: 'Por favor, introduce un estado para la incidencia' });
+      return;
+    }
+    const updatedIncidence = await incidentsService.updateStatus({ body });
+    res.status(200).json(updatedIncidence);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: 'Error al modificar el estado de la incidencencia' });
+  }
+}
+
 export {
   getById,
   getAll,
   create,
+  updateStatus,
 };

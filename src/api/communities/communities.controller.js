@@ -62,7 +62,6 @@ async function getByAddress(req, res) {
 
 async function getById(req, res) {
   const { _id } = req.params;
-  console.log({ _id });
   const community = await communitiesService.getById({ _id });
   if (!community) {
     res.status(500).send({ msg: 'Error al buscar comunidad por id' });
