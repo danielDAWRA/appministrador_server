@@ -1,10 +1,20 @@
 import multer from 'multer';
+import path from 'path';
 import * as incidentsService from './incidents.service.js';
 
 // esto esta mal salta directamente al model sin pasar ni por service ni por repo
 import incidentModel from './incidents.model.js';
 
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage });
 
 async function getById(req, res) {
   const { id } = req.params;
@@ -18,7 +28,8 @@ async function getAll(req, res) {
 }
 
 async function create(req, res) {
-  upload.array('photos')(req, res, async (err) => {
+  console.log('this is req: ', req);
+  upload.array('image')(req, res, async (err) => {
     if (err) {
       res.status(500).json({ msg: `Error: ${err}` });
       return;

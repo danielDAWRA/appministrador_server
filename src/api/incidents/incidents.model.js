@@ -4,7 +4,6 @@ const incidentsSchema = new Schema({
   title: {
     type: String,
     required: true,
-    unique: false,
   },
   community: {
     type: Schema.Types.ObjectId,
@@ -32,7 +31,7 @@ const incidentsSchema = new Schema({
     required: true,
   },
   image: {
-    type: String,
+    type: [String],
     required: false,
   },
   status: {

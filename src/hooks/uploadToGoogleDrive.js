@@ -9,8 +9,6 @@ function authorize() {
   const redirectUri = process.env.GOOGLE_REDIRECT_URI;
   const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
 
-  console.log(oAuth2Client);
-
   // Check if we have previously stored a token.
   const tokenPath = 'token.json';
   if (fs.existsSync(tokenPath)) {
@@ -25,7 +23,7 @@ const auth = authorize();
 
 async function uploadToGoogleDrive(filePath) {
   const drive = google.drive({ version: 'v3', auth });
-  const response = await drive.files.create({
+  const file = await drive.files.create({
     requestBody: {
       name: path.basename(filePath),
     },
@@ -35,7 +33,20 @@ async function uploadToGoogleDrive(filePath) {
     },
   });
 
-  return response.data.webContentLink;
+  await drive.permissions.create({
+    fileId: file.data.id,
+    requestBody: {
+      role: 'reader',
+      type: 'anyone',
+    },
+  });
+
+  const result = await drive.files.get({
+    fileId: file.data.id,
+    fields: 'webContentLink',
+  });
+
+  return result.data.webContentLink;
 }
 
 export default uploadToGoogleDrive;
