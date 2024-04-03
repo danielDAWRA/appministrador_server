@@ -28,13 +28,14 @@ async function getByAddress({ normalizedAddress }) {
 }
 
 async function getById({ _id }) {
-  const community = await communitiesRepository.getById({ _id });
+  const community = communitiesRepository.getById({ ids: [_id] });
   return community;
 }
 
 async function getByUserId({ _id }) {
   const user = await usersRepository.getById({ id: _id });
-  const community = await getById(user.community_id);
+  const communitiesIds = user.community_id;
+  const community = await getById({ _id: communitiesIds });
   return community;
 }
 

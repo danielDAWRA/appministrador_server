@@ -71,11 +71,11 @@ async function getById(req, res) {
 
 async function getByUserId(req, res) {
   const { _id } = req.params;
-  const community = await communitiesService.getByUserId({ _id });
-  if (!community) {
+  const communities = await communitiesService.getByUserId({ _id });
+  if (!communities) {
     res.status(500).send({ msg: 'Error al buscar comunidad por id' });
   }
-  return res.json(community);
+  return res.json(communities);
 }
 
 export {
