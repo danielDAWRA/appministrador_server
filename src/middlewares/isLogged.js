@@ -11,12 +11,6 @@ function isLogged(req, res, next) {
     '/auth/login',
     '/auth/register',
     '/auth/validate',
-    '/auth/modifySensitiveData',
-    '/products/',
-    '/products/all',
-    '/gameTitles/productId/',
-    '/genres/',
-    '/platforms',
     '/incidents', // while developing
     '/oauth2/auth', // while developing
     '/oauth2/oauth2callback', // while developing
