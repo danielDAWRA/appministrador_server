@@ -20,10 +20,12 @@ async function getByTitle(title) {
   return incident;
 }
 
-async function create(newTitleData) {
-  const newTitle = new IncidentModel(newTitleData);
-  await newTitle.save();
-  return newTitle;
+async function create({ newIncident }) {
+  console.log('newIncident: ', newIncident);
+  const createdIncident = new IncidentModel(newIncident);
+  await createdIncident.save();
+  console.log('createdIncident: ', createdIncident);
+  return createdIncident;
 }
 
 async function updateStatus({ _id, updatedBody }) {

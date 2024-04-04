@@ -13,6 +13,7 @@ const incidentsSchema = new Schema({
   },
   description: {
     type: String,
+    required: true,
   },
   owner: {
     type: ObjectId,
@@ -22,7 +23,7 @@ const incidentsSchema = new Schema({
     type: ObjectId,
     ref: 'Provider',
   },
-  progressSteps: [{
+  progress: [{
     title: String,
     date: Date,
     note: String,
@@ -31,9 +32,13 @@ const incidentsSchema = new Schema({
     type: Date,
   },
   image: {
-    type: String,
+    type: [String],
+    required: false,
   },
-  status: String,
+  status: {
+    type: String,
+    required: true,
+  },
   notifyUsers: [String],
 });
 
