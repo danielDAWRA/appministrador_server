@@ -68,7 +68,7 @@ async function create({ newIncident }) {
     incidentCopy.image = photoUrls;
   }
   // As formData cannot send objects progress added in backend
-  incidentCopy.progress = { title: 'Registro de incidencia', date: incidentCopy.date, note: 'Incidencia recibida' };
+  incidentCopy.progressSteps = { title: 'Registro de incidencia', date: incidentCopy.date, note: 'Incidencia recibida' };
 
   // Pass the incident data (with photo URLs instead of files) to the repository
   const createdIncident = await incidentsRepository.create({ newIncident: incidentCopy });
