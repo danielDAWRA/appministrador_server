@@ -1,44 +1,35 @@
 import { Schema, model } from 'mongoose';
 
+const { ObjectId } = Schema.Types;
+
 const incidentsSchema = new Schema({
   title: {
     type: String,
     required: true,
   },
   community: {
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: 'Community',
-    required: false,
   },
   description: {
     type: String,
     required: true,
   },
   owner: {
-    type: String,
-    required: true,
+    type: ObjectId,
+    ref: 'User',
   },
   provider: {
-    type: String,
-    required: false,
+    type: ObjectId,
+    ref: 'Provider',
   },
+  progress: [{
+    title: String,
+    date: Date,
+    note: String,
+  }],
   date: {
     type: Date,
-    required: true,
-  },
-  progress: {
-    title: {
-      type: String,
-      required: false,
-    },
-    date: {
-      type: Date,
-      required: false,
-    },
-    note: {
-      type: String,
-      required: false,
-    },
   },
   image: {
     type: [String],
@@ -48,6 +39,7 @@ const incidentsSchema = new Schema({
     type: String,
     required: true,
   },
+  notifyUsers: [String],
 });
 
 const incidentModel = model('Incident', incidentsSchema);

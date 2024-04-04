@@ -3,7 +3,7 @@ import path from 'path';
 import * as incidentsService from './incidents.service.js';
 
 // esto esta mal salta directamente al model sin pasar ni por service ni por repo
-import incidentModel from './incidents.model.js';
+// import incidentModel from './incidents.model.js';
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -17,18 +17,17 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 async function getById(req, res) {
-  const { id } = req.params;
-  const incidents = await incidentModel.getById({ id });
+  const { _id } = req.params;
+  const incidents = await incidentsService.getById({ _id });
   res.json(incidents);
 }
 
 async function getAll(req, res) {
-  const incidents = await incidentModel.getAll();
+  const incidents = await incidentsService.getAll();
   res.json(incidents);
 }
 
 async function create(req, res) {
-  console.log('this is req: ', req);
   upload.array('image')(req, res, async (err) => {
     if (err) {
       res.status(500).json({ msg: `Error: ${err}` });
@@ -51,8 +50,33 @@ async function create(req, res) {
   });
 }
 
+async function updateStatus(req, res) {
+  try {
+    const { body } = req;
+    if (!body._id) {
+      res
+        .status(400)
+        .send({ message: 'Por favor, introduce un id de incidencia válido' });
+      return;
+    }
+    if (!body.step) {
+      res
+        .status(400)
+        .send({ message: 'Por favor, introduce un estado para la incidencia' });
+      return;
+    }
+    const updatedIncidence = await incidentsService.updateStatus({ body });
+    res.status(200).json(updatedIncidence);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: 'Error al modificar el estado de la incidencencia' });
+  }
+}
+
 export {
   getById,
   getAll,
   create,
+  updateStatus,
 };

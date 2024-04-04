@@ -26,13 +26,35 @@ const usersSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  credit: {
-    type: Number,
-    default: 500,
+  door: String,
+  floor: String,
+  phone: {
+    type: String,
+    match: /^\+?[0-9]+$/, // Regex for phone number validation
+    required: true,
   },
-  points: {
-    type: Number,
+  isOwner: {
+    type: Boolean,
+    default: false,
   },
+  communicationAddress: {
+    street: String,
+    city: String,
+    state: String,
+    postalCode: String,
+  },
+  community_id: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Community',
+    required: true,
+  },
+  notifications: {
+    type: Boolean,
+    default: true,
+  },
+  associateNumber: String,
+  image: String,
+  companyName: String,
 });
 
 const userModel = model('User', usersSchema, 'users');

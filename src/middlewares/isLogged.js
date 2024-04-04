@@ -20,6 +20,7 @@ function isLogged(req, res, next) {
     '/incidents', // while developing
     '/oauth2/auth', // while developing
     '/oauth2/oauth2callback', // while developing
+    // '/auth/modifySensitiveData',
   ];
   const isPublicRoute = publicRoutes.some((publicRoute) => req.url.startsWith(publicRoute));
   if (isPublicRoute) {
@@ -41,7 +42,7 @@ function isLogged(req, res, next) {
     const user = await userService.getById({ id: payload.userId });
     if (!user.validated) {
       res.status(401);
-      res.json({ msg: 'Please confirm your email address' });
+      res.json({ msg: 'Por favor, confirma tu dirección de correo electrónico' });
       return;
     }
     req.user = user;
