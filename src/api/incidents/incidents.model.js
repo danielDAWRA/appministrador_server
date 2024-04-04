@@ -27,8 +27,18 @@ const incidentsSchema = new Schema({
     required: true,
   },
   progress: {
-    type: String,
-    required: true,
+    title: {
+      type: String,
+      required: false,
+    },
+    date: {
+      type: Date,
+      required: false,
+    },
+    note: {
+      type: String,
+      required: false,
+    },
   },
   image: {
     type: [String],
