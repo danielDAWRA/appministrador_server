@@ -23,7 +23,7 @@ const incidentsSchema = new Schema({
     type: ObjectId,
     ref: 'Provider',
   },
-  progress: [{
+  progressSteps: [{
     title: String,
     date: Date,
     note: String,
