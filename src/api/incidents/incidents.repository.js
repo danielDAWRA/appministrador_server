@@ -10,6 +10,13 @@ async function getAll() {
   return incidents;
 }
 
+async function getByUserId({ communityId }) {
+  const incidents = await IncidentModel
+    .find({ community: { $in: communityId } })
+    .lean();
+  return incidents;
+}
+
 async function getByProductId({ IncidentId }) {
   const incident = await IncidentModel.findById(IncidentId).lean();
   return incident;
@@ -54,6 +61,7 @@ async function updateStatus({ _id, updatedBody }) {
 export {
   getById,
   getAll,
+  getByUserId,
   getByProductId,
   getByTitle,
   create,
