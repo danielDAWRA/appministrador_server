@@ -28,15 +28,19 @@ async function getByAddress({ normalizedAddress }) {
 }
 
 async function getById({ _id }) {
-  const community = communitiesRepository.getById({ ids: [_id] });
+  const community = communitiesRepository.getById({ ids: _id });
   return community;
 }
 
-async function getByUserId({ _id }) {
-  const user = await usersRepository.getById({ id: _id });
-  const communitiesIds = user.community_id;
-  const community = await getById({ _id: communitiesIds });
-  return community;
+async function getByUserId({ _id, communityId }) {
+  if (_id) {
+    const user = await usersRepository.getById({ id: _id });
+    const communityIds = user.community_id;
+    const communities = await getById({ _id: communityIds });
+    return communities;
+  }
+  const communities = await getById({ _id: communityId });
+  return communities;
 }
 
 export {
