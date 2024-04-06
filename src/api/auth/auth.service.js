@@ -31,7 +31,7 @@ async function login({ email, password }) {
   const token = getToken({ userId: user._id, timeout: TOKEN_TIMEOUT });
   return {
     token,
-    user,
+    user: JSON.stringify(user),
   };
 }
 
