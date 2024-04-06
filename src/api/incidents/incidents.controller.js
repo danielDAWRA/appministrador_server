@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import multer from 'multer';
 import path from 'path';
 import * as incidentsService from './incidents.service.js';
@@ -24,6 +25,13 @@ async function getById(req, res) {
 
 async function getAll(req, res) {
   const incidents = await incidentsService.getAll();
+  res.json(incidents);
+}
+
+async function getByUserId(req, res) {
+  console.log(req.user);
+  const { community_id } = req.user;
+  const incidents = await incidentsService.getByUserId({ communityId: community_id });
   res.json(incidents);
 }
 
@@ -77,6 +85,7 @@ async function updateStatus(req, res) {
 export {
   getById,
   getAll,
+  getByUserId,
   create,
   updateStatus,
 };

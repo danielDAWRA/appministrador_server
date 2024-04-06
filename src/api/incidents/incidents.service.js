@@ -40,6 +40,11 @@ async function getAll() {
   return incidents;
 }
 
+async function getByUserId({ communityId }) {
+  const incidents = await incidentsRepository.getByUserId({ communityId });
+  return incidents;
+}
+
 async function create({ newIncident }) {
   const incidentCopy = { ...newIncident };
 
@@ -70,7 +75,6 @@ async function create({ newIncident }) {
   const createdIncident = await incidentsRepository.create({ newIncident: incidentCopy });
   return createdIncident;
 }
-
 
 async function createGoogleDriveFile({ newIncident }) {
   const incidentCopy = { ...newIncident };
@@ -136,6 +140,7 @@ async function updateStatus({ body }) {
 export {
   getById,
   getAll,
+  getByUserId,
   createGoogleDriveFile,
   create,
   updateStatus,
