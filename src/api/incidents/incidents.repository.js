@@ -13,6 +13,8 @@ async function getAll() {
 async function getByUserId({ communityId }) {
   const incidents = await IncidentModel
     .find({ community: { $in: communityId } })
+    .populate({ path: 'community' })
+    // .populate({ path: 'provider' })
     .lean();
   return incidents;
 }
