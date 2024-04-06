@@ -1,4 +1,6 @@
+/* eslint-disable camelcase */
 import * as communitiesService from './communities.service.js';
+
 // esto esta mal salta directamente al model sin pasar ni por service ni por repo - Se corregirá
 // Marc:
 // he tenido que trabajar con una de estas funciones
@@ -71,10 +73,14 @@ async function getById(req, res) {
 
 async function getByUserId(req, res) {
   const { _id } = req.params;
-  const communities = await communitiesService.getByUserId({ _id });
-  if (!communities) {
-    res.status(500).send({ msg: 'Error al buscar comunidad por id' });
+  // used only two '==' as _id is equal to req.user._id in value but not type
+  // eslint-disable-next-line eqeqeq
+  if (_id == req.user._id) {
+    const { community_id } = req.user;
+    const communities = await communitiesService.getByUserId({ communityId: community_id });
+    return res.json(communities);
   }
+  const communities = await communitiesService.getByUserId({ _id });
   return res.json(communities);
 }
 
