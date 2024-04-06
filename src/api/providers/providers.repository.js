@@ -1,4 +1,4 @@
-import * as ProviderModel from './providers.model.js';
+import ProviderModel from './providers.model.js';
 
 async function getAll() {
   const providers = await ProviderModel.find({}).lean();
