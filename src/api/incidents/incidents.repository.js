@@ -4,6 +4,7 @@ async function getById({ _id }) {
   const incident = await IncidentModel
     .findById(_id)
     .populate({ path: 'community' })
+    .populate({ path: 'owner' })
     .populate({ path: 'provider' })
     .lean();
   return incident;
