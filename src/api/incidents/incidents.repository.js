@@ -1,7 +1,11 @@
 import IncidentModel from './incidents.model.js';
 
 async function getById({ _id }) {
-  const incident = await IncidentModel.findById(_id);
+  const incident = await IncidentModel
+    .findById(_id)
+    .populate({ path: 'community' })
+    .populate({ path: 'provider' })
+    .lean();
   return incident;
 }
 
