@@ -11,7 +11,7 @@ function isLogged(req, res, next) {
     '/auth/login',
     '/auth/register',
     '/auth/validate',
-    // '/incidents', // this needs to be private now to take data from req.user
+    '/incidents', // this needs to be private now to take data from req.user
     '/oauth2/auth', // while developing
     '/oauth2/oauth2callback', // while developing
     // '/auth/modifySensitiveData',
