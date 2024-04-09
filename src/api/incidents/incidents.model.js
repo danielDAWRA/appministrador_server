@@ -15,6 +15,10 @@ const incidentsSchema = new Schema({
     type: String,
     required: true,
   },
+  category: {
+    type: String,
+    required: true,
+  },
   owner: {
     type: ObjectId,
     ref: 'User',
