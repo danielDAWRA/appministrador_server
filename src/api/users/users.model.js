@@ -50,6 +50,10 @@ const usersSchema = new Schema({
   },
   notifications: {
     type: Boolean,
+    default: false,
+  },
+  enableMediaAccess: {
+    type: Boolean,
     default: true,
   },
   associateNumber: String,
