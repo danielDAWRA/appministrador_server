@@ -1,12 +1,9 @@
 import { Schema, model } from 'mongoose';
 
 const providersSchema = new Schema({
-  title: {
+  companyName: {
     type: String,
     required: true,
-  },
-  description: {
-    type: String,
   },
   services: {
     type: [String],
