@@ -54,7 +54,7 @@ const usersSchema = new Schema({
   },
   enableMediaAccess: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   associateNumber: String,
   image: String,
