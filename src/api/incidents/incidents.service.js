@@ -138,24 +138,15 @@ async function createGoogleDriveFile({ newIncident }) {
 }
 
 async function updateStatus({ body }) {
-  const {
-    _id, step, description, image, ...rest
-  } = body;
+  const { _id, step } = body;
   step.date = getUtcDateTime();
-  let { status } = rest;
+  let status = '';
   if (step.title === 'Apertura de reclamación' || step.title === 'Trabajando en la reparación' || step.title === 'Inspección') {
     status = 'Activa';
   } else {
     status = 'Resuelta';
   }
   const updatedBody = { step, status };
-  if (description !== undefined) {
-    updatedBody.description = description;
-  }
-  if (image !== undefined) {
-    updatedBody.image = image;
-  }
-  console.log(updatedBody);
   const updatedIncident = await
   incidentsRepository.updateStatus({ _id, updatedBody });
   sendEmailNotification({ incident: updatedIncident, isNew: false });
