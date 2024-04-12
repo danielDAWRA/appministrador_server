@@ -1,6 +1,7 @@
 import fs from 'fs';
 import uploadToGoogleDrive from '../../hooks/uploadToGoogleDrive.js';
 import uploadToFirebaseStorage from '../../hooks/uploadToFirebaseStorage.js';
+import User from '../users/users.model.js';
 import * as incidentsRepository from './incidents.repository.js';
 import transporter from '../nodemailer.js';
 
@@ -16,17 +17,31 @@ function getUtcDateTime() {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds} UTC`;
 }
 
-async function sendEmailNotification({ updatedIncident }) {
-  const lastupdate = updatedIncident.progressSteps.pop();
-  await transporter.sendMail({
-    bcc: updatedIncident.notifyUsers,
-    subject: `Incidencia ${updatedIncident.title}`,
-    html: `<h3>Cambio de estado de la incidencia ${updatedIncident.title}</h3><br>
-    La incidencia ${updatedIncident.title} de la comunidad ${updatedIncident.community.address} ha pasado a la siguiente etapa: ${lastupdate.title} <br>
-    Estado: ${updatedIncident.status}
-    ${updatedIncident.status.state === 'Registro de incidencia' ? `Decripción: ${updatedIncident.description}` : ''}  <br>
+async function sendEmailNotification({ incident, isNew }) {
+  const lastupdate = incident.progressSteps.pop();
+  let subject;
+  let html;
+
+  if (isNew) {
+    subject = `Nueva incidencia ${incident.title}`;
+    html = `<h3>Se ha reportado una nueva incidencia</h3><br>
+    Se ha registrado una nueva incidencia. en tu comunidad: ${incident.title}<br>
+    Descripción: ${incident.description}
+    `;
+  } else {
+    subject = `Incidencia ${incident.title}`;
+    html = `<h3>Cambio de estado de la incidencia ${incident.title}</h3><br>
+    La incidencia ${incident.title} de la comunidad ${incident.community.address} ha pasado a la siguiente etapa: ${lastupdate.title} <br>
+    Estado: ${incident.status}
+    ${incident.status.state === 'Registro de incidencia' ? `Decripción: ${incident.description}` : ''}  <br>
     ${lastupdate.note !== undefined ? `Nota adicional : ${lastupdate.note}` : ''}
-    `,
+    `;
+  }
+
+  await transporter.sendMail({
+    bcc: incident.notifyUsers,
+    subject,
+    html,
   });
 }
 
@@ -71,8 +86,18 @@ async function create({ newIncident }) {
   // As formData cannot send objects progress added in backend
   incidentCopy.progressSteps = { title: 'Registro de incidencia', date: incidentCopy.date, note: 'Incidencia recibida' };
 
+  incidentCopy.notifyUsers = [];
+  const owner = await User.findById(incidentCopy.owner);
+  const ownerEmail = owner.email;
+
+  if (!incidentCopy.notifyUsers.includes(ownerEmail)) {
+    incidentCopy.notifyUsers.push(ownerEmail);
+  }
   // Pass the incident data (with photo URLs instead of files) to the repository
   const createdIncident = await incidentsRepository.create({ newIncident: incidentCopy });
+
+  sendEmailNotification({ incident: createdIncident, isNew: true });
+
   return createdIncident;
 }
 
@@ -133,7 +158,7 @@ async function updateStatus({ body }) {
   console.log(updatedBody);
   const updatedIncident = await
   incidentsRepository.updateStatus({ _id, updatedBody });
-  sendEmailNotification({ updatedIncident });
+  sendEmailNotification({ incident: updatedIncident, isNew: false });
   return updatedIncident;
 }
 
