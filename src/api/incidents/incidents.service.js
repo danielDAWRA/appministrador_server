@@ -149,10 +149,6 @@ async function updateStatus({ body }) {
       date: newDate,
     };
     progressSteps.push(newStep);
-    // step.date = newDate;
-    // newSteps.push(step);
-    // const newIndex = stepNames.indexOf(step.title) + 1;
-    // step.title = stepNames[newIndex];
   }
   step.date = newDate;
   progressSteps.push(step);
