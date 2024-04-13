@@ -73,8 +73,8 @@ async function updateStatus(req, res) {
         .send({ message: 'Por favor, introduce un estado para la incidencia' });
       return;
     }
-    const updatedIncidence = await incidentsService.updateStatus({ body });
-    res.status(200).json(updatedIncidence);
+    const updatedIncident = await incidentsService.updateStatus({ body });
+    res.status(200).json(updatedIncident);
   } catch (error) {
     res
       .status(500)
