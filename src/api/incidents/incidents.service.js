@@ -140,6 +140,10 @@ const stepNames = ['Registro de incidencia', 'Apertura de reclamación', 'Inspec
 
 async function updateStatus({ body }) {
   const { _id, step } = body;
+  if (!step) {
+    const updatedIncident = await incidentsRepository.updateStatus({ _id, updatedBody: body });
+    return updatedIncident;
+  }
   const currentIncident = await incidentsRepository.getById({ _id });
   const { progressSteps } = currentIncident;
   const newDate = getUtcDateTime();

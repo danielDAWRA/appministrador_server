@@ -60,20 +60,14 @@ async function create(req, res) {
 
 async function updateStatus(req, res) {
   try {
-    const { body } = req;
-    if (!body._id) {
+    const { _id } = req.body;
+    if (!_id) {
       res
         .status(400)
         .send({ message: 'Por favor, introduce un id de incidencia válido' });
       return;
     }
-    if (!body.step) {
-      res
-        .status(400)
-        .send({ message: 'Por favor, introduce un estado para la incidencia' });
-      return;
-    }
-    const updatedIncident = await incidentsService.updateStatus({ body });
+    const updatedIncident = await incidentsService.updateStatus({ body: req.body });
     res.status(200).json(updatedIncident);
   } catch (error) {
     res
