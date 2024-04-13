@@ -152,8 +152,6 @@ async function updateStatus({ body }) {
   }
   step.date = newDate;
   progressSteps.push(step);
-  console.log('progressSteps', progressSteps);
-  console.log('progressSteps.length', progressSteps.length, 'stepNames.indexOf(step.title)', stepNames.indexOf(step.title));
   let status = '';
   if (step.title === 'Apertura de reclamación' || step.title === 'Trabajando en la reparación' || step.title === 'Inspección') {
     status = 'Activa';
