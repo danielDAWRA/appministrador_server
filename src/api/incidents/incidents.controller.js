@@ -29,7 +29,6 @@ async function getAll(req, res) {
 }
 
 async function getByUserId(req, res) {
-  console.log(req.user);
   const { community_id } = req.user;
   const incidents = await incidentsService.getByUserId({ communityId: community_id });
   res.json(incidents);
