@@ -24,10 +24,11 @@ async function sendEmailNotification({ incident, isNew }) {
   let html;
 
   if (isNew) {
-    subject = 'Nueva incidencia en tu comunidad';
+    subject = `Nueva incidencia en ${incident.community.address}`;
     html = `<h3>Se ha reportado una nueva incidencia</h3><br>
     Se ha registrado una nueva incidencia en tu comunidad: ${incident.title}<br>
     Descripción: ${incident.description}
+    Enlace: ??
     `;
   } else {
     subject = `Incidencia ${incident.title}`;
@@ -103,8 +104,7 @@ async function create({ newIncident, owner }) {
   // Pass the incident data (with photo URLs instead of files) to the repository
   const createdIncident = await incidentsRepository.create({ newIncident: incidentCopy });
   const createdIncidentDetails = await incidentsRepository.getById({ _id: createdIncident._id });
-  console.log('createdIncidentDetails', createdIncidentDetails);
-  // sendEmailNotification({ incident: createdIncident, isNew: true });
+  sendEmailNotification({ incident: createdIncidentDetails, isNew: true });
   return createdIncident;
 }
 
