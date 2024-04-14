@@ -80,9 +80,15 @@ async function updateCredit({ user, paymentMethod, total }) {
   return updatedCredit;
 }
 
+async function getByCommunityId({ _id }) {
+  const communityUsers = await usersRepository.getByCommunityId({ _id });
+  return communityUsers;
+}
+
 export {
   getById,
   patch,
   getByEmail,
   updateCredit,
+  getByCommunityId,
 };

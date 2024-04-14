@@ -1,8 +1,9 @@
 import fs from 'fs';
 import uploadToGoogleDrive from '../../hooks/uploadToGoogleDrive.js';
 import uploadToFirebaseStorage from '../../hooks/uploadToFirebaseStorage.js';
-import User from '../users/users.model.js';
+import * as communitiesRepository from '../communities/communities.repository.js';
 import * as incidentsRepository from './incidents.repository.js';
+import * as usersRepository from '../users/users.repository.js';
 import transporter from '../nodemailer.js';
 
 function getUtcDateTime() {
@@ -23,9 +24,9 @@ async function sendEmailNotification({ incident, isNew }) {
   let html;
 
   if (isNew) {
-    subject = `Nueva incidencia ${incident.title}`;
+    subject = 'Nueva incidencia en tu comunidad';
     html = `<h3>Se ha reportado una nueva incidencia</h3><br>
-    Se ha registrado una nueva incidencia. en tu comunidad: ${incident.title}<br>
+    Se ha registrado una nueva incidencia en tu comunidad: ${incident.title}<br>
     Descripción: ${incident.description}
     `;
   } else {
@@ -60,7 +61,7 @@ async function getByUserId({ communityId }) {
   return incidents;
 }
 
-async function create({ newIncident }) {
+async function create({ newIncident, owner }) {
   const incidentCopy = { ...newIncident };
 
   if (incidentCopy.photos) {
@@ -81,23 +82,29 @@ async function create({ newIncident }) {
     }));
 
     incidentCopy.image = firebaseDownloadUrls;
-    console.log(firebaseDownloadUrls);
+    // console.log(firebaseDownloadUrls);
   }
   // As formData cannot send objects progress added in backend
-  incidentCopy.progressSteps = { title: 'Registro de incidencia', date: incidentCopy.date, note: 'Incidencia recibida' };
+  incidentCopy.progressSteps = { title: 'Registro de incidencia', date: incidentCopy.date };
+  const communityUsers = await usersRepository.getByCommunityId({ _id: incidentCopy.community });
+  const notifyList = communityUsers
+    .filter((user) => !!user.notifications)
+    .map((user) => user.email);
+  incidentCopy.notifyUsers = notifyList;
+  const { email } = owner;
+  const communitiesInfo = await communitiesRepository.getById({ ids: incidentCopy.community });
+  const administratorEmail = communitiesInfo[0].administrator.email;
+  const checkList = [email, administratorEmail];
+  checkList
+    .filter((mail) => !incidentCopy.notifyUsers.includes(mail))
+    .map((mail) => incidentCopy.notifyList.push(mail));
+  console.log('incidentCopy with all emails', incidentCopy);
 
-  incidentCopy.notifyUsers = [];
-  const owner = await User.findById(incidentCopy.owner);
-  const ownerEmail = owner.email;
-
-  if (!incidentCopy.notifyUsers.includes(ownerEmail)) {
-    incidentCopy.notifyUsers.push(ownerEmail);
-  }
   // Pass the incident data (with photo URLs instead of files) to the repository
   const createdIncident = await incidentsRepository.create({ newIncident: incidentCopy });
-
-  sendEmailNotification({ incident: createdIncident, isNew: true });
-
+  const createdIncidentDetails = await incidentsRepository.getById({ _id: createdIncident._id });
+  console.log('createdIncidentDetails', createdIncidentDetails);
+  // sendEmailNotification({ incident: createdIncident, isNew: true });
   return createdIncident;
 }
 

@@ -82,9 +82,16 @@ async function getProfile(req, res) {
   return res.json(req.user);
 }
 
+async function getByCommunityId(req, res) {
+  const { _id } = req.params;
+  const communityUsers = await usersService.getByCommunityId({ _id });
+  return res.json(communityUsers);
+}
+
 export {
   getById,
   patch,
   getByEmail,
   getProfile,
+  getByCommunityId,
 };
