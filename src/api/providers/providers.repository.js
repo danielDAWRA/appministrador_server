@@ -10,7 +10,16 @@ async function getById({ _id }) {
   return provider;
 }
 
+async function getByCategory({ category }) {
+  const providers = await ProviderModel
+    .find({ categories: category })
+    .sort({ rating: -1 })
+    .lean();
+  return providers;
+}
+
 export {
   getAll,
   getById,
+  getByCategory,
 };

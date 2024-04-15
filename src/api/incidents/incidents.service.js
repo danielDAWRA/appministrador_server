@@ -185,6 +185,11 @@ async function editNotifyList({ _id, email, subscribe }) {
   return updatedIncident;
 }
 
+async function getByCategory({ category }) {
+  const incidents = await incidentsRepository.getByCategory({ category });
+  return incidents;
+}
+
 export {
   getById,
   getAll,
@@ -193,4 +198,5 @@ export {
   create,
   updateStatus,
   editNotifyList,
+  getByCategory,
 };

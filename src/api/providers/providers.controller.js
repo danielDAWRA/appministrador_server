@@ -11,7 +11,14 @@ async function getById(req, res) {
   res.json(provider);
 }
 
+async function getByCategory(req, res) {
+  const { category } = req.params;
+  const providers = await providersService.getByCategory({ category });
+  res.json(providers);
+}
+
 export {
   getAll,
   getById,
+  getByCategory,
 };

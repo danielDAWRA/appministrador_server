@@ -62,6 +62,14 @@ async function editNotifyList({ _id, email, subscribe }) {
   return updatedIncident;
 }
 
+async function getByCategory({ category }) {
+  const incidents = await IncidentModel
+    .find({ category, status: { $ne: 'Resuelta' } })
+    .sort({ date: -1 })
+    .lean();
+  return incidents;
+}
+
 export {
   getById,
   getAll,
@@ -71,4 +79,5 @@ export {
   create,
   updateStatus,
   editNotifyList,
+  getByCategory,
 };
