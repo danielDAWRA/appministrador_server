@@ -75,10 +75,18 @@ async function updateStatus(req, res) {
   }
 }
 
+async function editNotifyList(req, res) {
+  const { _id, subscribe } = req.body;
+  const { email } = req.user;
+  const updatedIncident = await incidentsService.editNotifyList({ _id, email, subscribe });
+  return res.json(updatedIncident);
+}
+
 export {
   getById,
   getAll,
   getByUserId,
   create,
   updateStatus,
+  editNotifyList,
 };

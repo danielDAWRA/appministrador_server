@@ -49,6 +49,19 @@ async function updateStatus({ _id, updatedBody }) {
   return updatedIncident;
 }
 
+async function editNotifyList({ _id, email, subscribe }) {
+  const update = subscribe
+    ? { $push: { notifyUsers: email } }
+    : { $pull: { notifyUsers: email } };
+  const updatedIncident = await
+  IncidentModel.findByIdAndUpdate(
+    { _id },
+    update,
+    { new: true },
+  );
+  return updatedIncident;
+}
+
 export {
   getById,
   getAll,
@@ -57,4 +70,5 @@ export {
   getByTitle,
   create,
   updateStatus,
+  editNotifyList,
 };
