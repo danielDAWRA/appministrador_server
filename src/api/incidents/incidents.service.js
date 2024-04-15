@@ -22,21 +22,27 @@ async function sendEmailNotification({ incident, isNew }) {
   const lastupdate = incident.progressSteps.pop();
   let subject;
   let html;
-
+  const link = `https://tuappministrador.vercel.app/incidencias/detalle/${incident._id}`;
   if (isNew) {
     subject = `Nueva incidencia en ${incident.community.address}`;
-    html = `<h3>Se ha reportado una nueva incidencia</h3><br>
-    Se ha registrado una nueva incidencia en tu comunidad: ${incident.title}<br>
-    Descripción: ${incident.description}
-    Enlace: ??
+    html = `<h4>Se ha registrado una incidencia en su comunidad a través de Tu Appministrador:</h4>
+    <strong>${incident.title}</strong><br><br>
+    Esta incidencia está pendiente de aprobación por parte del administrador/a.<br><br>
+    Para ver más detalles sobre esta incidencia y seguir su progreso, haz clic en el siguiente enlace:<br>
+    <a href=${link}>${incident.title} en ${incident.community.address}</a><br><br>
+    Gracias por tu atención y colaboración.<br><br><br>
+    Tu Appministrador<br><br>
     `;
   } else {
-    subject = `Incidencia ${incident.title}`;
-    html = `<h3>Cambio de estado de la incidencia ${incident.title}</h3><br>
-    La incidencia ${incident.title} de la comunidad ${incident.community.address} ha pasado a la siguiente etapa: ${lastupdate.title} <br>
-    Estado: ${incident.status}
-    ${incident.status.state === 'Registro de incidencia' ? `Decripción: ${incident.description}` : ''}  <br>
-    ${lastupdate.note !== undefined ? `Nota adicional : ${lastupdate.note}` : ''}
+    subject = `Cambio de estado de la incidencia: ${incident.title}`;
+    html = `<h4>${incident.title} en ${incident.community.address} ha pasado a la siguiente etapa:</h4>
+    <strong>${lastupdate.title}</strong><br><br>
+    ${!!lastupdate.note && 'El adminstrador/a ha adjuntado la siguiente nota informativa:<br>'}
+    ${!!lastupdate.note && `"${lastupdate.note}"`}<br><br>
+    Para ver más detalles sobre esta incidencia y seguir su progreso, haz clic en el siguiente enlace:<br>
+    <a href=${link}>${incident.title} en ${incident.community.address}</a><br><br>
+    Gracias por tu atención y colaboración.<br><br><br>
+    Tu Appministrador<br><br>
     `;
   }
 
@@ -99,8 +105,6 @@ async function create({ newIncident, owner }) {
   checkList
     .filter((mail) => !incidentCopy.notifyUsers.includes(mail))
     .map((mail) => incidentCopy.notifyList.push(mail));
-  console.log('incidentCopy with all emails', incidentCopy);
-
   // Pass the incident data (with photo URLs instead of files) to the repository
   const createdIncident = await incidentsRepository.create({ newIncident: incidentCopy });
   const createdIncidentDetails = await incidentsRepository.getById({ _id: createdIncident._id });

@@ -35,10 +35,7 @@ async function getByTitle(title) {
 }
 
 async function create({ newIncident }) {
-  // console.log('newIncident: ', newIncident);
-  const createdIncident = new IncidentModel(newIncident);
-  await createdIncident.save();
-  // console.log('createdIncident: ', createdIncident);
+  const createdIncident = await IncidentModel.create(newIncident);
   return createdIncident;
 }
 
