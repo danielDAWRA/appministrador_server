@@ -34,13 +34,11 @@ async function patch({ _id, newProps }) {
   return updatedUser;
 }
 
-async function updateCredit({ user, paymentMethod, total }) {
-  const updatedUserData = await UserModel.findOneAndUpdate(
-    { _id: user._id },
-    { $inc: { [paymentMethod]: -total } },
-    { new: true },
-  );
-  return updatedUserData;
+async function getByCommunityId({ _id }) {
+  const communityUsers = await UserModel
+    .find({ community_id: _id })
+    .lean();
+  return communityUsers;
 }
 
 export {
@@ -49,6 +47,6 @@ export {
   register,
   validate,
   patch,
-  updateCredit,
   modifySensitiveData,
+  getByCommunityId,
 };

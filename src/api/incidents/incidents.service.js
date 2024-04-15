@@ -1,8 +1,9 @@
 import fs from 'fs';
 import uploadToGoogleDrive from '../../hooks/uploadToGoogleDrive.js';
 import uploadToFirebaseStorage from '../../hooks/uploadToFirebaseStorage.js';
-import User from '../users/users.model.js';
+import * as communitiesRepository from '../communities/communities.repository.js';
 import * as incidentsRepository from './incidents.repository.js';
+import * as usersRepository from '../users/users.repository.js';
 import transporter from '../nodemailer.js';
 
 function getUtcDateTime() {
@@ -21,20 +22,27 @@ async function sendEmailNotification({ incident, isNew }) {
   const lastupdate = incident.progressSteps.pop();
   let subject;
   let html;
-
+  const link = `https://tuappministrador.vercel.app/incidencias/detalle/${incident._id}`;
   if (isNew) {
-    subject = `Nueva incidencia ${incident.title}`;
-    html = `<h3>Se ha reportado una nueva incidencia</h3><br>
-    Se ha registrado una nueva incidencia. en tu comunidad: ${incident.title}<br>
-    Descripción: ${incident.description}
+    subject = `Nueva incidencia en ${incident.community.address}`;
+    html = `<h4>Se ha registrado una incidencia en su comunidad a través de Tu Appministrador:</h4>
+    <strong>${incident.title}</strong><br><br>
+    Esta incidencia está pendiente de aprobación por parte del administrador/a.<br><br>
+    Para ver más detalles sobre esta incidencia y seguir su progreso, haz clic en el siguiente enlace:<br>
+    <a href=${link}>${incident.title} en ${incident.community.address}</a><br><br>
+    Gracias por tu atención y colaboración.<br><br><br>
+    Tu Appministrador<br><br>
     `;
   } else {
-    subject = `Incidencia ${incident.title}`;
-    html = `<h3>Cambio de estado de la incidencia ${incident.title}</h3><br>
-    La incidencia ${incident.title} de la comunidad ${incident.community.address} ha pasado a la siguiente etapa: ${lastupdate.title} <br>
-    Estado: ${incident.status}
-    ${incident.status.state === 'Registro de incidencia' ? `Decripción: ${incident.description}` : ''}  <br>
-    ${lastupdate.note !== undefined ? `Nota adicional : ${lastupdate.note}` : ''}
+    subject = `Cambio de estado de la incidencia: ${incident.title}`;
+    html = `<h4>${incident.title} en ${incident.community.address} ha pasado a la siguiente etapa:</h4>
+    <strong>${lastupdate.title}</strong><br><br>
+    ${!!lastupdate.note && 'El adminstrador/a ha adjuntado la siguiente nota informativa:<br>'}
+    ${!!lastupdate.note && `"${lastupdate.note}"`}<br><br>
+    Para ver más detalles sobre esta incidencia y seguir su progreso, haz clic en el siguiente enlace:<br>
+    <a href=${link}>${incident.title} en ${incident.community.address}</a><br><br>
+    Gracias por tu atención y colaboración.<br><br><br>
+    Tu Appministrador<br><br>
     `;
   }
 
@@ -60,7 +68,7 @@ async function getByUserId({ communityId }) {
   return incidents;
 }
 
-async function create({ newIncident }) {
+async function create({ newIncident, owner }) {
   const incidentCopy = { ...newIncident };
 
   if (incidentCopy.photos) {
@@ -81,23 +89,26 @@ async function create({ newIncident }) {
     }));
 
     incidentCopy.image = firebaseDownloadUrls;
-    console.log(firebaseDownloadUrls);
+    // console.log(firebaseDownloadUrls);
   }
   // As formData cannot send objects progress added in backend
-  incidentCopy.progressSteps = { title: 'Registro de incidencia', date: incidentCopy.date, note: 'Incidencia recibida' };
-
-  incidentCopy.notifyUsers = [];
-  const owner = await User.findById(incidentCopy.owner);
-  const ownerEmail = owner.email;
-
-  if (!incidentCopy.notifyUsers.includes(ownerEmail)) {
-    incidentCopy.notifyUsers.push(ownerEmail);
-  }
+  incidentCopy.progressSteps = { title: 'Registro de incidencia', date: incidentCopy.date };
+  const communityUsers = await usersRepository.getByCommunityId({ _id: incidentCopy.community });
+  const notifyList = communityUsers
+    .filter((user) => !!user.notifications)
+    .map((user) => user.email);
+  incidentCopy.notifyUsers = notifyList;
+  const { email } = owner;
+  const communitiesInfo = await communitiesRepository.getById({ ids: incidentCopy.community });
+  const administratorEmail = communitiesInfo[0].administrator.email;
+  const checkList = [email, administratorEmail];
+  checkList
+    .filter((mail) => !incidentCopy.notifyUsers.includes(mail))
+    .map((mail) => incidentCopy.notifyList.push(mail));
   // Pass the incident data (with photo URLs instead of files) to the repository
   const createdIncident = await incidentsRepository.create({ newIncident: incidentCopy });
-
-  sendEmailNotification({ incident: createdIncident, isNew: true });
-
+  const createdIncidentDetails = await incidentsRepository.getById({ _id: createdIncident._id });
+  sendEmailNotification({ incident: createdIncidentDetails, isNew: true });
   return createdIncident;
 }
 

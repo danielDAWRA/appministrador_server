@@ -27,7 +27,10 @@ async function getByAddress({ normalizedAddress }) {
 }
 
 async function getById({ ids }) {
-  const community = await communityModel.find({ _id: { $in: ids } }).lean();
+  const community = await communityModel
+    .find({ _id: { $in: ids } })
+    .populate({ path: 'administrator' })
+    .lean();
   return community;
 }
 
