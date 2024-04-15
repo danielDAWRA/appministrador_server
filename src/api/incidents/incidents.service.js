@@ -180,6 +180,11 @@ async function updateStatus({ body }) {
   return updatedIncident;
 }
 
+async function editNotifyList({ _id, email, subscribe }) {
+  const updatedIncident = await incidentsRepository.editNotifyList({ _id, email, subscribe });
+  return updatedIncident;
+}
+
 export {
   getById,
   getAll,
@@ -187,4 +192,5 @@ export {
   createGoogleDriveFile,
   create,
   updateStatus,
+  editNotifyList,
 };
