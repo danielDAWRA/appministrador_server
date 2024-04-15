@@ -5,7 +5,7 @@ const providersSchema = new Schema({
     type: String,
     required: true,
   },
-  services: {
+  categories: {
     type: [String],
     required: true,
   },

@@ -10,7 +10,13 @@ async function getById({ _id }) {
   return provider;
 }
 
+async function getByCategory({ category }) {
+  const providers = await providersRepository.getByCategory({ category });
+  return providers;
+}
+
 export {
   getAll,
   getById,
+  getByCategory,
 };

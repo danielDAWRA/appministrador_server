@@ -82,6 +82,12 @@ async function editNotifyList(req, res) {
   return res.json(updatedIncident);
 }
 
+async function getByCategory(req, res) {
+  const { category } = req.params;
+  const incidents = await incidentsService.getByCategory({ category });
+  res.json(incidents);
+}
+
 export {
   getById,
   getAll,
@@ -89,4 +95,5 @@ export {
   create,
   updateStatus,
   editNotifyList,
+  getByCategory,
 };
