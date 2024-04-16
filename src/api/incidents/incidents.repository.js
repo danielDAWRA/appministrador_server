@@ -19,7 +19,7 @@ async function getByUserId({ communityId }) {
   const incidents = await IncidentModel
     .find({ community: { $in: communityId } })
     .populate({ path: 'community' })
-    .populate({ path: 'provider' })
+    // .populate({ path: 'provider' })
     .lean();
   return incidents;
 }
@@ -65,6 +65,7 @@ async function editNotifyList({ _id, email, subscribe }) {
 async function getByCategory({ category }) {
   const incidents = await IncidentModel
     .find({ category, status: { $ne: 'Resuelta' } })
+    .populate({ path: 'community' })
     .sort({ date: -1 })
     .lean();
   return incidents;
