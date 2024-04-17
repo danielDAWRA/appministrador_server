@@ -21,6 +21,13 @@ const usersSchema = new Schema({
   password: {
     type: String,
     required: true,
+    validate: {
+      // eslint-disable-next-line func-names, object-shorthand
+      validator: function (v) {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+}{:;'?/.,`~])(?!.*\s).{8}$/.test(v);
+      },
+      message: (props) => `${props.value} no es una contraseña válida. Asegúrate de que tenga al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.`
+    },
   },
   validated: {
     type: Boolean,
