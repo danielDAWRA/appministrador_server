@@ -37,8 +37,8 @@ async function sendEmailNotification({ incident, isNew }) {
     subject = `Cambio de estado de la incidencia: ${incident.title}`;
     html = `<h4>${incident.title} en ${incident.community.address} ha pasado a la siguiente etapa:</h4>
     <strong>${lastupdate.title}</strong><br><br>
-    ${!!lastupdate.note && 'El adminstrador/a ha adjuntado la siguiente nota informativa:<br>'}
-    ${!!lastupdate.note && `"${lastupdate.note}"`}<br><br>
+    ${lastupdate.note ? 'El adminstrador/a ha adjuntado la siguiente nota informativa:<br>' : ''}
+    ${lastupdate.note ? `"${lastupdate.note}"` : ''}<br><br>
     Para ver más detalles sobre esta incidencia y seguir su progreso, haz clic en el siguiente enlace:<br>
     <a href=${link}>${incident.title} en ${incident.community.address}</a><br><br>
     Gracias por tu atención y colaboración.<br><br><br>
