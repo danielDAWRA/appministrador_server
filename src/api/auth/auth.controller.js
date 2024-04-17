@@ -30,6 +30,11 @@ function isValidPhoneNumber(phoneNumber) {
   return phoneRegex.test(phoneNumber);
 }
 
+function isValidPassword(password) {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+}{:;'?/.,`~]).{8,}$/;
+  return regex.test(password);
+}
+
 async function register(req, res) {
   const {
     email, phone, password, repeatedPassword,
@@ -48,6 +53,10 @@ async function register(req, res) {
     res.status(400);
     res.json({ msg: 'Both passwords must match.' });
     return;
+  }
+  if (!isValidPassword(password)) {
+    res.status(400);
+    res.json({ msg: 'This password does not meet the specified password format' });
   }
   const existingUser = await authService.isExistingUser({ email });
   if (existingUser) {
