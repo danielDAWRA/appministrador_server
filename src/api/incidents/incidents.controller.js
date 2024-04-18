@@ -51,7 +51,6 @@ async function create(req, res) {
       ...req.body,
       photos: req.files.map((file) => file.path),
     };
-
     const createdIncident = await incidentsService.create({ newIncident, owner: req.user });
     res.json(createdIncident);
   });
