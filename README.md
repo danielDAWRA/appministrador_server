@@ -15,7 +15,7 @@
 <!-- ABOUT THE OBJECTIVES -->
 
 ## Objectives
- Tuappministrador_server is a Communities Management Web Application API designed for the 'Colegio de Administradores de Fincas de Valencia y Castellón' for hepling community administrators manage their work load throuhg a powerfull APP.
+ Tuappministrador_server is a Communities Management Web Application API designed for the 'Colegio de Administradores de Fincas de Valencia y Castellón' for helping community administrators manage their work load through a powerfull APP.
 
 ### The API fulfills the following requirements:
 
@@ -108,16 +108,19 @@ The API will be accessible at http://localhost:3000 by default.
   <p align="center">
 
 - Janis Melderlis
+<br>
 <a href = "mailto:jaanmeld8@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
 <a href="https://www.linkedin.com/in/jm-24095226/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
 <a href="https://github.com/jaanmeld" target="_blank"><img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" target="_blank"></a>
 
 - Marc Dilley
+<br>
 <a href = "mailto:dilley.marc@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
 <a href="https://www.linkedin.com/in/marc-dilley-288407a1/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
 <a href="https://github.com/nuinn" target="_blank"><img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" target="_blank"></a>
 
 - Daniel Dawra Wehbe
+<br>
 <a href = "mailto:dawra.daniel@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
 <a href="http://linkedin.com/in/daniel-dawra-944465167" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
 <a href="https://github.com/danielDAWRA" target="_blank"><img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" target="_blank"></a>
