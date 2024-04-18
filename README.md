@@ -38,24 +38,24 @@
   Tuappministrador_server is a Communities Management Web Application API! This API is designed to empower community administrators and users to efficiently manage and visualize the state of incidents within a building. This projects aims at improoving administrators ans community users communication and resolve incidences. It leverages JavaScript, Node.js, Express, and Mongoose to provide a robust and user-friendly platform for incident tracking and resolution.
 
 ## API Controllers Functionality
-1. Users Controller (users)
+### 1. Users Controller (users)
 
 User Management: Allows the creation, updating, and deletion of users within the system.
 Profile Data Changes: Users can modify their profile information such as name, email address, etc.
 Authentication and Authorization: Implements authentication and authorization logic to protect routes and actions.
 
-2. Incidences Controller (incidences)
+### 2. Incidences Controller (incidences)
 
 Incident Management: Facilitates the creation, modification, and updating of incidents reported within the community.
 Status Tracking: Tracks the status of each incident, allowing administrators and users to monitor progress.
 Notification System: Sends email notifications to users when incident status changes or when significant updates occur.
 
-3. Communities Controller (communities)
+### 3. Communities Controller (communities)
 
 Community Visualization: Provides endpoints for viewing community details such as contact information for the president, address, etc.
 Information Accessibility: Ensures that community-related data is easily accessible to authorized users.
 
-4. Providers Controller (providers)
+### 4.Providers Controller (providers)
 
 Service Providers Listing: Allows users to view a list of potential service providers for repair services.
 Categorization: Organizes service providers by categories to simplify search and selection for incident resolution.
@@ -107,9 +107,9 @@ The API will be accessible at http://localhost:3000 by default.
 
   <p align="center">
 
-Janis Melderlis
+Jānis Melderis
 <br>
-<a href = "mailto:jaanmeld8@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+<a href = "mailto:jaanmeld@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
 <a href="https://www.linkedin.com/in/jm-24095226/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
 <a href="https://github.com/jaanmeld" target="_blank"><img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" target="_blank"></a>
 <br>
@@ -135,7 +135,6 @@ Daniel Dawra Wehbe
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/frances-morales
 [HTML5]: https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white
 [HTML5-url]: https://developer.mozilla.org/en-US/docs/Glossary/HTML5
 [CSS3]: https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white
