@@ -104,7 +104,7 @@ async function create({ newIncident, owner }) {
   const checkList = [email, administratorEmail];
   checkList
     .filter((mail) => !incidentCopy.notifyUsers.includes(mail))
-    .map((mail) => incidentCopy.notifyList.push(mail));
+    .map((mail) => incidentCopy.notifyUsers.push(mail));
   // Pass the incident data (with photo URLs instead of files) to the repository
   const createdIncident = await incidentsRepository.create({ newIncident: incidentCopy });
   const createdIncidentDetails = await incidentsRepository.getById({ _id: createdIncident._id });
